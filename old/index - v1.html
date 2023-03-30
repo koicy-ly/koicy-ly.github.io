@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/favicon.ico" rel="icon" type="image/png">
+  <title>红黑树的小屋 - 世界再见</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body,
+    html,
+    #canvas {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      z-index: -1;
+    }
+
+    .home-logo-detail {
+      position: absolute;
+      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iMTEyLjY0OG1tIgogICBoZWlnaHQ9IjExMi42NDhtbSIKICAgdmlld0JveD0iMCAwIDExMi42NDggMTEyLjY0OCIKICAgdmVyc2lvbj0iMS4xIgogICBpZD0ic3ZnNSIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMS4yLjIgKDczMmEwMWRhNjMsIDIwMjItMTItMDkpIgogICBzb2RpcG9kaTpkb2NuYW1lPSJhLnN2ZyIKICAgaW5rc2NhcGU6ZXhwb3J0LWZpbGVuYW1lPSJsb2dvLnBuZyIKICAgaW5rc2NhcGU6ZXhwb3J0LXhkcGk9IjUwMDAiCiAgIGlua3NjYXBlOmV4cG9ydC15ZHBpPSI1MDAwIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0ibmFtZWR2aWV3NyIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiMwMDAwMDAiCiAgICAgYm9yZGVyb3BhY2l0eT0iMC4yNSIKICAgICBpbmtzY2FwZTpzaG93cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIgogICAgIGlua3NjYXBlOnBhZ2VjaGVja2VyYm9hcmQ9IjAiCiAgICAgaW5rc2NhcGU6ZGVza2NvbG9yPSIjZDFkMWQxIgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJtbSIKICAgICBzaG93Z3JpZD0iZmFsc2UiCiAgICAgc2hvd2d1aWRlcz0iZmFsc2UiCiAgICAgaW5rc2NhcGU6em9vbT0iMiIKICAgICBpbmtzY2FwZTpjeD0iMzEwIgogICAgIGlua3NjYXBlOmN5PSIxNjYuNzUiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIyNTYwIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9IjE0MTEiCiAgICAgaW5rc2NhcGU6d2luZG93LXg9Ii05IgogICAgIGlua3NjYXBlOndpbmRvdy15PSItOSIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIxIgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9ImxheWVyMSIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiI+CiAgICA8cmVjdAogICAgICAgeD0iMzIwIgogICAgICAgeT0iNTQ4IgogICAgICAgd2lkdGg9IjQwNiIKICAgICAgIGhlaWdodD0iMjI0IgogICAgICAgaWQ9InJlY3QzMzUyMCIgLz4KICAgIDxyZWN0CiAgICAgICB4PSIxOTUuNjQ4NTEiCiAgICAgICB5PSIzNjUuMDY0ODIiCiAgICAgICB3aWR0aD0iMzgzLjY0NTk3IgogICAgICAgaGVpZ2h0PSIyMjUuMTU5NzQiCiAgICAgICBpZD0icmVjdDgzMzQiIC8+CiAgICA8bGluZWFyR3JhZGllbnQKICAgICAgIGlkPSJsaW5lYXJHcmFkaWVudDc0MDgiCiAgICAgICBpbmtzY2FwZTpzd2F0Y2g9InNvbGlkIj4KICAgICAgPHN0b3AKICAgICAgICAgc3R5bGU9InN0b3AtY29sb3I6IzAwMDAwMDtzdG9wLW9wYWNpdHk6MTsiCiAgICAgICAgIG9mZnNldD0iMCIKICAgICAgICAgaWQ9InN0b3A3NDA2IiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudAogICAgICAgaWQ9ImxpbmVhckdyYWRpZW50NjY3NiIKICAgICAgIGlua3NjYXBlOnN3YXRjaD0ic29saWQiPgogICAgICA8c3RvcAogICAgICAgICBzdHlsZT0ic3RvcC1jb2xvcjojMzdiNGE2O3N0b3Atb3BhY2l0eToxOyIKICAgICAgICAgb2Zmc2V0PSIwIgogICAgICAgICBpZD0ic3RvcDY2NzQiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSLDpcKbwr7DpcKxwoIgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiPgogICAgPHJlY3QKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7ZmlsbC1vcGFjaXR5OjAuMzE3NjQ3MDc7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBpZD0icmVjdDIzNiIKICAgICAgIHdpZHRoPSI5MCIKICAgICAgIGhlaWdodD0iOTAiCiAgICAgICB4PSItMTEzLjk2NDUzIgogICAgICAgeT0iLTUuMTQyMzczNiIKICAgICAgIHRyYW5zZm9ybT0icm90YXRlKC0xMDQuOTc0NSkiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZToyMi45MzA2cHg7Zm9udC1mYW1pbHk6Q29uc29sYXM7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonQ29uc29sYXMsIE5vcm1hbCc7Zm9udC12YXJpYW50LWxpZ2F0dXJlczpub3JtYWw7Zm9udC12YXJpYW50LWNhcHM6bm9ybWFsO2ZvbnQtdmFyaWFudC1udW1lcmljOm5vcm1hbDtmb250LXZhcmlhbnQtZWFzdC1hc2lhbjpub3JtYWw7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxIgogICAgICAgeD0iMC4zMjg5NjM0NiIKICAgICAgIHk9IjQ5LjU2NDI2MiIKICAgICAgIGlkPSJ0ZXh0ODM5MyIKICAgICAgIHRyYW5zZm9ybT0icm90YXRlKC0xNSkiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW44MzkxIgogICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6MjIuOTMwNTk5MjlweDtmb250LWZhbWlseTpDb25zb2xhczstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidDb25zb2xhcywgTm9ybWFsJztmb250LXZhcmlhbnQtbGlnYXR1cmVzOm5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpub3JtYWw7Zm9udC12YXJpYW50LW51bWVyaWM6bm9ybWFsO2ZvbnQtdmFyaWFudC1lYXN0LWFzaWFuOm5vcm1hbDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgeD0iMC4zMjg5NjM0NiIKICAgICAgICAgeT0iNDkuNTY0MjYyIj5SZWQ8L3RzcGFuPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6MjIuOTMwNTk5MjlweDtmb250LWZhbWlseTpDb25zb2xhczstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidDb25zb2xhcywgTm9ybWFsJztmb250LXZhcmlhbnQtbGlnYXR1cmVzOm5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpub3JtYWw7Zm9udC12YXJpYW50LW51bWVyaWM6bm9ybWFsO2ZvbnQtdmFyaWFudC1lYXN0LWFzaWFuOm5vcm1hbDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgeD0iMC4zMjg5NjM0NiIKICAgICAgICAgeT0iNzguMjI3NTA5IgogICAgICAgICBpZD0idHNwYW44Mzk1Ij5CbGFjazwvdHNwYW4+PHRzcGFuCiAgICAgICAgIHNvZGlwb2RpOnJvbGU9ImxpbmUiCiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZToyMi45MzA1OTkyOXB4O2ZvbnQtZmFtaWx5OkNvbnNvbGFzOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246J0NvbnNvbGFzLCBOb3JtYWwnO2ZvbnQtdmFyaWFudC1saWdhdHVyZXM6bm9ybWFsO2ZvbnQtdmFyaWFudC1jYXBzOm5vcm1hbDtmb250LXZhcmlhbnQtbnVtZXJpYzpub3JtYWw7Zm9udC12YXJpYW50LWVhc3QtYXNpYW46bm9ybWFsO2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgICB4PSIwLjMyODk2MzQ2IgogICAgICAgICB5PSIxMDYuODkwNzYiCiAgICAgICAgIGlkPSJ0c3BhbjgzOTciPlRyZWU8L3RzcGFuPjwvdGV4dD4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojZmYwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDowO3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxIgogICAgICAgaWQ9InJlY3Q4NDEwIgogICAgICAgd2lkdGg9IjkuOTk5OTk5IgogICAgICAgaGVpZ2h0PSI5Ljk5OTk5OSIKICAgICAgIHg9IjczLjg0NjI3NSIKICAgICAgIHk9IjI1LjAwMTkzMiIKICAgICAgIGlua3NjYXBlOnRyYW5zZm9ybS1jZW50ZXIteD0iNy43MjUxMTk3IgogICAgICAgaW5rc2NhcGU6dHJhbnNmb3JtLWNlbnRlci15PSI5LjkzMjI5OCIKICAgICAgIHRyYW5zZm9ybT0icm90YXRlKC0xNSkiIC8+CiAgICA8cmVjdAogICAgICAgc3R5bGU9ImZpbGw6I2ZmN2Y3ZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGlkPSJyZWN0MjI5ODQiCiAgICAgICB3aWR0aD0iOS45OTk2NTc2IgogICAgICAgaGVpZ2h0PSI5Ljk5OTk3NTIiCiAgICAgICB4PSI3My44MDgyMiIKICAgICAgIHk9IjEwMy4wMDI1NiIKICAgICAgIGlua3NjYXBlOnRyYW5zZm9ybS1jZW50ZXIteD0iMC42NjA0NDU2IgogICAgICAgaW5rc2NhcGU6dHJhbnNmb3JtLWNlbnRlci15PSIwLjAwMDcyMjUwNTk4IgogICAgICAgdHJhbnNmb3JtPSJyb3RhdGUoLTE1KSIgLz4KICAgIDxyZWN0CiAgICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDowO3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxIgogICAgICAgaWQ9InJlY3QyNjA1MiIKICAgICAgIHdpZHRoPSIxMCIKICAgICAgIGhlaWdodD0iMTAiCiAgICAgICB4PSI3My44Mjc0MjMiCiAgICAgICB5PSI2NC4wMDI5ODMiCiAgICAgICB0cmFuc2Zvcm09InJvdGF0ZSgtMTUpIiAvPgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICB0cmFuc2Zvcm09InNjYWxlKDAuMjY0NTgzMzMpIgogICAgICAgaWQ9InRleHQzMzUxOCIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZTo4Ni42NjY3cHg7Zm9udC1mYW1pbHk6J0NsaW5jaGVyIE1vbm8gQ29kZSc7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonQ2xpbmNoZXIgTW9ubyBDb2RlLCBOb3JtYWwnO2ZvbnQtdmFyaWFudC1saWdhdHVyZXM6bm9ybWFsO2ZvbnQtdmFyaWFudC1jYXBzOm5vcm1hbDtmb250LXZhcmlhbnQtbnVtZXJpYzpub3JtYWw7Zm9udC12YXJpYW50LWVhc3QtYXNpYW46bm9ybWFsO3doaXRlLXNwYWNlOnByZTtzaGFwZS1pbnNpZGU6dXJsKCNyZWN0MzM1MjApO2Rpc3BsYXk6aW5saW5lO2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6I2ZmN2Y3ZjtzdHJva2Utd2lkdGg6MDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIgLz4KICA8L2c+Cjwvc3ZnPgo=);
+      width: 240px;
+      height: 250px;
+      background-size: 240px;
+      background-repeat: no-repeat;
+      z-index: 1;
+      left: -275px;
+      right: 0;
+      top: 425px;
+      bottom: 0;
+      margin: auto;
+      animation: home-logo-appear 1500ms;
+      zoom: 120%;
+    }
+
+    @keyframes home-logo-appear {
+      0% {
+        opacity: 0;
+        transform: rotate(15deg);
+      }
+
+      45% {
+        opacity: 0.8;
+        transform: rotate(15deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: rotate(0deg);
+      }
+    }
+
+    .home-menu {
+      top: 0;
+      right: 96px;
+      padding: 96px 0;
+      width: 300px;
+      position: absolute;
+      animation: home-menu 1600ms 1;
+      zoom: 110%;
+    }
+
+    .home-footer {
+      text-align: center
+    }
+
+    .citrus-card {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      background-color: hsl(30, 100%, 95%);
+      width: 100%;
+      border-bottom-color: hsla(30, 75%, 40%, 0.5);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      padding: 8px;
+    }
+
+    .home-overlay {
+      pointer-events: none;
+      position: absolute;
+      top: 96px;
+      bottom: 128px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    .home-item {
+      height: 100px;
+      display: block;
+      overflow: hidden;
+      background-position: 100% 0;
+      background-size: 300px;
+      background-repeat: no-repeat
+    }
+
+    .home-item>span {
+      display: block;
+      position: absolute;
+      left: 8px;
+      bottom: 8px
+    }
+
+    * {
+      position: relative;
+      box-sizing: border-box;
+      font-weight: normal;
+    }
+
+
+    a {
+      text-decoration: none;
+      color: hsla(30, 100%, 35%, 0.8)
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      clear: both
+    }
+
+    .citrus-button:hover::before {
+      opacity: 1
+    }
+
+    .citrus-button::before {
+      content: "";
+      z-index: 5;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      background-color: rgba(255, 127, 0, 0.25);
+      transition: all 500ms;
+    }
+
+    @keyframes home-menu {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    ::selection {
+      background: #cce8d8;
+    }
+
+    a::before {
+      transition: all 400ms;
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      background-color: rgba(255, 127, 0, 0.25)
+    }
+
+    a:hover::before {
+      opacity: 1
+    }
+  </style>
+</head>
+
+<body>
+  <div class="home-menu" id="home-menu">
+    <div class="home-overlay citrus-overlay" id="home-overlay"></div>
+    <div class="home-topbar citrus-card citrus-oneline" id="home-topbar">
+      <a href="/">
+        <div class="home-back citrus-button" id="home-back"></div>
+      </a>
+      <span id="home-title"><center>世界再见</center></span>
+    </div>
+    <nav class="home-nav" id="home-nav">
+      <div class="home-main" id="home-main">
+        <a href="https://rbtr.ee/projects">
+          <div class="citrus-card citrus-button home-item" id="item-small-works" style="background-image:url(/sp.png)">
+            <span>大企划</span>
+          </div>
+        </a>
+        <a href="https://imgs.lemon.vin" target="_blank">
+          <div class="citrus-card citrus-button home-item" id="item-big-projects" style="background-image:url(/pb.png)">
+            <span>图床</span>
+          </div>
+        </a>
+        <a href="https://rbtr.ee" target="_blank">
+          <div class="citrus-card citrus-button home-item" id="item-blog" style="background-image:url(/oiblog.png)">
+            <span>OI 博客</span>
+          </div>
+        </a>
+        <a href="https://rb.fail" target="_blank">
+          <div class="citrus-card citrus-button home-item" id="item-data-drop"
+            style="background-image:url(/noiblog.png)"><span>非 OI
+              博客</span></div>
+        </a>
+      </div>
+      <footer class="home-footer citrus-card citrus-oneline" id="footer">
+        <a href="https://rbtr.ee/about" target="_blank">关于</a> · <a href="/friends.html" target="_blank">友链</a> · <a
+        href="mailto:n@rbtr.ee">联系</a> · <a href="/snk/">小游戏</a>
+      </footer>
+    </nav>
+  </div>
+  <div class="home-logofield">
+    <div class="home-logo" id="home-logo">
+      <div class="home-logo-detail" id="home-logo-detail"></div>
+    </div>
+  </div>
+  <canvas id="canvas">欸？怎么没有 canvas 啊？启用它之后刷新一下吧 :)</canvas>
+  <script type="text/javascript">
+    var left = 6, right = 40, len = 17, sleep = 25, hcnt = 200, wcnt = 1000, id = 0;
+    var a = new Array();
+    var b = new Array();
+    var d = new Array();
+    var sqs = new Array();
+    var sx = new Array();
+    var sy = new Array();
+    var canvas = document.getElementById('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const sq = canvas.getContext('2d');
+    for (var j = 0; j < hcnt; ++j) {
+      for (var i = 0; i < wcnt; ++i) {
+        sqs[id] = canvas.getContext('2d');
+        a[id] = left + Math.ceil(Math.random() * (right - left));
+        b[id] = 128 + a[id];
+        d[id] = 1;
+        sx[id] = i * len;
+        sy[id] = j * len;
+        id += 1;
+      }
+    }
+    function cc() {
+      for (var i = 0; i < hcnt * wcnt; ++i) {
+        sqs[i].fillStyle = 'rgba(255, ' + b[i] + ', ' + 2 * a[i] + ', 1)';
+        sqs[i].fillRect(sx[i], sy[i], len, len);
+        a[i] += d[i] * Math.ceil(Math.random() * 3);
+        b[i] = 128 + a[i];
+        if (a[i] >= right) d[i] = -1;
+        if (a[i] <= left) d[i] = 1;
+      }
+    }
+    setInterval(cc, sleep);
+  </script>
+</body>
+
+</html>
